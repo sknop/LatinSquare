@@ -26,30 +26,17 @@
 
 package latinsquare
 
-import exceptions.IllegalCellPositionException
+import scala.collection.mutable.ArrayBuffer
 
-case class Point(x : Int, y : Int) extends Ordered[Point] {
-  override def toString: String = {
-    String.format("(%d,%d)",x,y)
+class Cell(var limit: Int, var location: Point) {
+
+  private var value : Int = 0
+  private var readOnly : Boolean = false
+  private val constraints = new ArrayBuffer[Constraint]
+
+  def this(limit: Int, x : Int, y : Int) {
+    this(limit, Point(x,y))
   }
 
-  override def compare(that: Point): Int = {
-    if (x == that.x) {
-      y - that.y
-    }
-    else {
-      x - that.x
-    }
-  }
-}
 
-object Point {
-  def createChecked(x : Int, y : Int, min : Int, max : Int) = {
-    if (x < min) throw new IllegalCellPositionException(String.format("%d less than %d", x, min))
-    if (x > max) throw new IllegalCellPositionException(String.format("%d larger than %d", x, max))
-    if (y < min) throw new IllegalCellPositionException(String.format("%d less than %d", y, min))
-    if (y > max) throw new IllegalCellPositionException(String.format("%d larger than %d", y, max))
-
-    new Point(x, y)
-  }
 }

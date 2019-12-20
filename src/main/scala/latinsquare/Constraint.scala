@@ -26,6 +26,6 @@
 
 package latinsquare
 
-class MarkUp {
+trait Constraint {
 
 }
