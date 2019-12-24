@@ -56,4 +56,12 @@ class CellTest extends AnyFlatSpec with Matchers {
             cell.setValue(3)
         }
     }
+
+    it should "have the correct String representation" in {
+        var cell = new Cell(9,1,2)
+
+        cell.setValue(3)
+
+        cell.toString should be ("(1,2):3")
+    }
 }
