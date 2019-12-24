@@ -26,17 +26,65 @@
 
 package latinsquare
 
+import exceptions.CellContentException
+import unit.Constraint
+
 import scala.collection.mutable.ArrayBuffer
 
 class Cell(var limit: Int, var location: Point) {
 
-  private var value : Int = 0
-  private var readOnly : Boolean = false
-  private val constraints = new ArrayBuffer[Constraint]
+    private var value: Int = 0
+    private var readOnly: Boolean = false
+    private val constraints = new ArrayBuffer[Constraint]
 
-  def this(limit: Int, x : Int, y : Int) {
-    this(limit, Point(x,y))
-  }
+    def this(limit: Int, x: Int, y: Int) {
+        this(limit, Point(x, y))
+    }
 
+    def isReadOnly: Boolean = readOnly
+
+    def isEmpty: Boolean = (value == 0)
+
+    def makeReadOnly : Unit = {
+        if (value != 0)
+            readOnly = true
+    }
+
+    def makeWritable : Unit = {
+        if (value != 0) {
+            readOnly = false
+        }
+    }
+
+    @throws(classOf[CellContentException])
+    def setValue(value: Int): Unit = {
+        if (readOnly)
+            throw new CellContentException(this.toString + " is read only")
+        else if (value > limit)
+            throw new CellContentException("Value " + value + " is larger than " + limit)
+        else {
+            // first, check contraints without changing them
+            constraints.foreach(_.checkUpdate(value))
+
+            // then set constraints
+            constraints.foreach(_.update(value))
+
+            this.value = value
+        }
+    }
+
+    def addConstraint(constraint: Constraint) =
+        constraints += constraint
+
+    def removeConstraint(constraint: Constraint) =
+        constraints -= constraint
+
+    override def toString: String = location.toString + ":" + getValueAsString
+
+    def getValueAsString: String = {
+        val c: Int = if (value < 10) ('0' + value) else ('A' + value - 10)
+
+        c.toChar.toString
+    }
 
 }

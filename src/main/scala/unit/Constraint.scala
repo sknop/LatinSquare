@@ -24,8 +24,19 @@
  *  ******************************************************************************
  */
 
-package latinsquare
+package unit
+
+import exceptions.CellContentException
+import latinsquare.Cell
 
 trait Constraint {
+  def getCells : List[Cell]
 
+  @throws(classOf[CellContentException])
+  def checkUpdate(value : Int)
+
+  @throws(classOf[CellContentException])
+  def update(value : Int)
+
+  def markup
 }
