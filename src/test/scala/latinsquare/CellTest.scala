@@ -27,41 +27,62 @@
 package latinsquare
 
 import exceptions.CellContentException
+import org.scalatest.OneInstancePerTest
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-class CellTest extends AnyFlatSpec with Matchers {
-    "A Cell" should "be empty on creation" in {
-        var cell = new Cell(9, 1,1)
+class CellTest extends AnyFlatSpec
+  with Matchers
+  with OneInstancePerTest {
+    behavior of "A Cell"
 
-        cell.isEmpty should be (true)
+    val cell = new Cell(9,1,2)
+
+    it should "be empty on creation" in {
+        cell.empty should be (true)
     }
 
     it should "be writable on creation" in {
-        var cell = new Cell(9, 1,1)
-
-        cell.isReadOnly should be (false)
+        cell.readonly should be (false)
     }
 
     it should "accept a value below the limit" in {
-        var cell = new Cell(9,1,2)
-
         cell.setValue(3)
     }
 
     it should "throw exception if setting a value larger than limit" in {
-        val cell = new Cell(2,1,1)
-
         a [CellContentException] should be thrownBy {
-            cell.setValue(3)
+            cell.setValue(10)
         }
     }
 
     it should "have the correct String representation" in {
-        var cell = new Cell(9,1,2)
-
         cell.setValue(3)
 
         cell.toString should be ("(1,2):3")
+    }
+
+    it should "reset without errors" in {
+        cell.setValue(3)
+
+        cell.value should be (3)
+
+        cell.reset
+
+        cell.value should be (0)
+    }
+
+    it should "be able to be set to readonly and back" in {
+        cell.setValue(3)
+
+        cell.readonly should be (false)
+
+        cell.readonly_(true)
+
+        cell.readonly should be (true)
+
+        cell.readonly_((false))
+
+        cell.readonly should be (false)
     }
 }

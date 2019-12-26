@@ -34,17 +34,15 @@ case class Point(x : Int, y : Int) extends Ordered[Point] {
   }
 
   override def compare(that: Point): Int = {
-    if (x == that.x) {
+    if (x == that.x)
       y - that.y
-    }
-    else {
+    else
       x - that.x
-    }
   }
 }
 
 object Point {
-  def createChecked(x : Int, y : Int, min : Int, max : Int) = {
+  def createChecked(x : Int, y : Int, min : Int, max : Int) : Point  = {
     if (x < min) throw new IllegalCellPositionException(String.format("%d less than %d", x, min))
     if (x > max) throw new IllegalCellPositionException(String.format("%d larger than %d", x, max))
     if (y < min) throw new IllegalCellPositionException(String.format("%d less than %d", y, min))

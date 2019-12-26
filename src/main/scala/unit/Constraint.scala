@@ -27,16 +27,18 @@
 package unit
 
 import exceptions.CellContentException
-import latinsquare.Cell
+import latinsquare.{Cell, MarkUp}
+
+import scala.collection.BitSet
 
 trait Constraint {
   def getCells : List[Cell]
 
   @throws(classOf[CellContentException])
-  def checkUpdate(value : Int)
+  def checkUpdate(value : Int) : Unit
 
   @throws(classOf[CellContentException])
-  def update(value : Int)
+  def update(value : Int) : Unit
 
-  def markup
+  def markup : MarkUp
 }

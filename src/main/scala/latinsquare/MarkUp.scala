@@ -26,6 +26,10 @@
 
 package latinsquare
 
-class MarkUp {
+import scala.collection.mutable
+
+class MarkUp(val limit : Int) {
+    var bitSet = new mutable.BitSet(limit)
+
 
 }
