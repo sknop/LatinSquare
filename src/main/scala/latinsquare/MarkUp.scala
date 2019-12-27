@@ -27,9 +27,58 @@
 package latinsquare
 
 import scala.collection.mutable
+import scala.collection.immutable
 
-class MarkUp(val limit : Int) {
-    var bitSet = new mutable.BitSet(limit)
+class MarkUp(limit : Int) {
+    val bitSet = new mutable.BitSet(limit)
 
+    // Constructor with BitMask
+    def this(limit : Int, mask : Int) {
+        this(limit)
+        bitSet ++= immutable.BitSet.fromBitMaskNoCopy(Array[Long](mask))
+    }
 
+    private def this(limit : Int, origin : immutable.BitSet) {
+        this(limit)
+        bitSet ++= origin
+    }
+
+    private def this(limit : Int, origin : mutable.BitSet) {
+        this(limit)
+        bitSet ++= origin
+    }
+
+    // add a number
+    def add(number : Int) : Unit = {
+        bitSet += number
+    }
+
+    // remove a number
+    def clear(number : Int) : Unit = {
+        bitSet -= number
+    }
+
+    // check existance of a number, can be used as MarkUp()
+    def apply(number : Int) : Boolean = {
+        bitSet(number)
+    }
+
+    def --(other : MarkUp) : MarkUp = {
+        val result = bitSet.toImmutable -- other.bitSet.toImmutable
+        new MarkUp(limit, result)
+    }
+
+    def complement : MarkUp = {
+        new MarkUp(limit, bitSet ^ MarkUp.allSet(limit).bitSet)
+    }
+
+    override def toString: String = {
+        "MarkUp : " + bitSet.toString()
+    }
+}
+
+object MarkUp {
+    def allSet(limit : Int) : MarkUp = {
+        new MarkUp(limit, (2 << limit) - 2)
+    }
 }

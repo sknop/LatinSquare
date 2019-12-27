@@ -59,6 +59,12 @@ class Cell(var limit: Int, var location: Point) {
         setValue(0)
     }
 
+    def markUp : MarkUp = {
+        var result : MarkUp = MarkUp.allSet(limit)
+
+        _constraints.foldLeft(result)((x,y) => x -- y.markup)
+    }
+
     @throws(classOf[CellContentException])
     def setValue(value: Int): Unit = {
         if (_readOnly)

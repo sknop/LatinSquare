@@ -24,19 +24,26 @@
  *  ******************************************************************************
  */
 
-package unit
+package latinsquare
 
-import exceptions.CellContentException
-import latinsquare.{Cell, MarkUp}
+import org.scalatest.OneInstancePerTest
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-trait Constraint {
-  def getCells : List[Cell]
+class MarkUpTest extends AnyFlatSpec with Matchers with OneInstancePerTest {
+    behavior of "A MarkUp"
 
-  @throws(classOf[CellContentException])
-  def checkUpdate(value : Int) : Unit
+    val markUp = new MarkUp(9)
 
-  @throws(classOf[CellContentException])
-  def update(value : Int) : Unit
+    it should "behave like a BitSet for adding" in {
+        markUp(1) should be (false)
 
-  def markup : MarkUp
+        markUp.add(1)
+
+        markUp(1) should be (true)
+
+        markUp.clear(1)
+
+        markUp(1) should be (false)
+    }
 }
