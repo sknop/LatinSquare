@@ -46,4 +46,22 @@ class MarkUpTest extends AnyFlatSpec with Matchers with OneInstancePerTest {
 
         markUp(1) should be (false)
     }
+
+    it should "have a working complement" in {
+        markUp.add(1)
+        markUp.add(2)
+
+        val complement = markUp.complement
+
+        complement(1) should be (false)
+        complement(3) should be (true)
+    }
+
+    it should "throw an exception if supplied numbers outside of range" in {
+        markUp.add(9)
+
+        a [IllegalArgumentException] should be thrownBy {
+            markUp.add(10)
+        }
+    }
 }

@@ -26,17 +26,6 @@
 
 package unit
 
-import exceptions.CellContentException
-import latinsquare.{Cell, MarkUp}
-
-trait Constraint {
-  def getCells : Iterable[Cell]
-
-  @throws(classOf[CellContentException])
-  def checkUpdate(value : Int) : Unit
-
-  @throws(classOf[CellContentException])
-  def update(oldValue : Int, newValue : Int) : Unit
-
-  def markup : MarkUp
+class Nonet(position : String) extends AbstractConstraint(9, position) {
+    override def toString: String = "Nonet " + super.toString
 }

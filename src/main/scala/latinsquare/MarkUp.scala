@@ -30,7 +30,7 @@ import scala.collection.mutable
 import scala.collection.immutable
 
 class MarkUp(limit : Int) {
-    val bitSet = new mutable.BitSet(limit)
+    private val bitSet = new mutable.BitSet(limit)
 
     // Constructor with BitMask
     def this(limit : Int, mask : Int) {
@@ -50,27 +50,33 @@ class MarkUp(limit : Int) {
 
     // add a number
     def add(number : Int) : Unit = {
+        require(number > 0 && number <= limit, s"Supplied number $number outside of ]0,$limit]")
         bitSet += number
     }
 
     // remove a number
     def clear(number : Int) : Unit = {
+        require(number > 0 && number <= limit, s"Supplied number $number outside of ]0,$limit]")
         bitSet -= number
     }
 
     // check existance of a number, can be used as MarkUp()
     def apply(number : Int) : Boolean = {
+        require(number > 0 && number <= limit, s"Supplied number $number outside of ]0,$limit]")
         bitSet(number)
     }
 
     def --(other : MarkUp) : MarkUp = {
-        val result = bitSet.toImmutable -- other.bitSet.toImmutable
+        val result : immutable.BitSet = bitSet.toImmutable -- other.bitSet.toImmutable
         new MarkUp(limit, result)
     }
 
     def complement : MarkUp = {
         new MarkUp(limit, bitSet ^ MarkUp.allSet(limit).bitSet)
     }
+
+    // TODO might need to add flag to make readonly - or implement second class
+    def toImmutable : MarkUp = new MarkUp(limit, bitSet)
 
     override def toString: String = {
         "MarkUp : " + bitSet.toString()

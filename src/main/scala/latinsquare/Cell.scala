@@ -27,7 +27,7 @@
 package latinsquare
 
 import exceptions.CellContentException
-import unit.Constraint
+import unit.{AbstractConstraint, Constraint}
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -76,7 +76,7 @@ class Cell(var limit: Int, var location: Point) {
             _constraints.foreach(_.checkUpdate(value))
 
             // then set constraints
-            _constraints.foreach(_.update(value))
+            _constraints.foreach(_.update(this._value, value))
 
             this._value = value
         }
