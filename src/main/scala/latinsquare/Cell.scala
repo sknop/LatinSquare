@@ -69,17 +69,17 @@ class Cell(var limit: Int, var location: Point) {
     def setValue(value: Int): Unit = {
         if (_readOnly)
             throw new CellContentException(this.toString + " is read only")
-        else if (value > limit)
+
+        if (value > limit)
             throw new CellContentException("Value " + value + " is larger than " + limit)
-        else {
-            // first, check contraints without changing them
-            _constraints.foreach(_.checkUpdate(value))
 
-            // then set constraints
-            _constraints.foreach(_.update(this._value, value))
+        // first, check contraints without changing them
+        _constraints.foreach(_.checkUpdate(value))
 
-            this._value = value
-        }
+        // then set constraints
+        _constraints.foreach(_.update(this._value, value))
+
+        this._value = value
     }
 
     def addConstraint(constraint: Constraint) =
