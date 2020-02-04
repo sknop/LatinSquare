@@ -32,8 +32,7 @@ import latinsquare.{Cell, MarkUp}
 trait Constraint {
   def getCells : Iterable[Cell]
 
-  @throws(classOf[CellContentException])
-  def checkUpdate(value : Int) : Unit
+  def checkUpdate(value : Int) : Boolean
 
   @throws(classOf[CellContentException])
   def update(oldValue : Int, newValue : Int) : Unit

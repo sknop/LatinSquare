@@ -43,12 +43,7 @@ abstract class AbstractConstraint protected (size : Int, position : String) exte
         cell.addConstraint(this)
     }
 
-    @throws(classOf[CellContentException])
-    override def checkUpdate(value: Int): Unit = {
-        if (markUp(value)) {
-            throw new CellContentException(s"Value $value already exists in $this")
-        }
-    }
+    override def checkUpdate(value: Int): Boolean = ! markUp(value)
 
     @throws(classOf[CellContentException])
     override def update(oldValue: Int, newValue : Int): Unit = {
@@ -57,12 +52,10 @@ abstract class AbstractConstraint protected (size : Int, position : String) exte
         }
 
         if (newValue != 0) {
-            if (markUp(newValue)) {
+            if (markUp(newValue))
                 throw new CellContentException(s"Value $newValue already exists in $this")
-            }
-            else {
-                markUp.add(newValue)
-            }
+
+            markUp.add(newValue)
         }
     }
 
