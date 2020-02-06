@@ -26,7 +26,7 @@
 
 package latinsquare
 
-import exceptions.IllegalCellPositionException
+import latinsquare.exceptions.IllegalCellPositionException
 
 case class Point(x : Int, y : Int) extends Ordered[Point] {
   override def toString: String = {

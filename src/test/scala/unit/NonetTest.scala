@@ -26,7 +26,7 @@
 
 package unit
 
-import exceptions.CellContentException
+import latinsquare.exceptions.CellContentException
 import latinsquare.Cell
 import org.scalatest.OneInstancePerTest
 import org.scalatest.flatspec.AnyFlatSpec

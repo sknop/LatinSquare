@@ -24,7 +24,7 @@
  *  ******************************************************************************
  */
 
-package exceptions
+package latinsquare.exceptions
 
 class CellContentException (message: String) extends Exception(message) {
 

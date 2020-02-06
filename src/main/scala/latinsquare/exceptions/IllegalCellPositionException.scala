@@ -24,7 +24,7 @@
  *  ******************************************************************************
  */
 
-package exceptions
+package latinsquare.exceptions
 
 class IllegalCellPositionException (message: String) extends Exception(message) {
 

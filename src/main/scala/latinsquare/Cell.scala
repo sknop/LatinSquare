@@ -26,7 +26,7 @@
 
 package latinsquare
 
-import exceptions.CellContentException
+import latinsquare.exceptions.CellContentException
 import unit.{AbstractConstraint, Constraint}
 
 import scala.collection.mutable.ArrayBuffer
