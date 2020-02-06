@@ -27,7 +27,7 @@
 package latinsquare
 
 import latinsquare.exceptions.CellContentException
-import unit.{AbstractConstraint, Constraint}
+import latinsquare.unit.{AbstractConstraint, Constraint}
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -74,7 +74,7 @@ class Cell(var limit: Int, var location: Point) {
             throw new CellContentException("Value " + value + " is larger than " + limit)
 
         // first, check contraints without changing them
-        // foldLeft, because the type changes from unit.Constraint to Boolean
+        // foldLeft, because the type changes from latinsquare.unit.Constraint to Boolean
         if (! _constraints.foldLeft(true)(_ & _.checkUpdate(value)))
             throw new CellContentException(s"Value $value already in constraints")
 

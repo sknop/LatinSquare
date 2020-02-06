@@ -24,8 +24,18 @@
  *  ******************************************************************************
  */
 
-package unit
+package latinsquare.unit
 
-class Nonet(position : String) extends AbstractConstraint(9, position) {
-    override def toString: String = "Nonet " + super.toString
+import latinsquare.exceptions.CellContentException
+import latinsquare.{Cell, MarkUp}
+
+trait Constraint {
+  def getCells : Iterable[Cell]
+
+  def checkUpdate(value : Int) : Boolean
+
+  @throws(classOf[CellContentException])
+  def update(oldValue : Int, newValue : Int) : Unit
+
+  def markup : MarkUp
 }
