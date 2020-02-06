@@ -37,13 +37,14 @@ abstract class AbstractConstraint protected (size : Int, position : String) exte
     override def getCells: Iterable[Cell] = cells.toSeq
 
     def addCell(cell : Cell) : Unit = {
-        require(cells.size <= size, "Too many cells added")
+        require(cells.size < size, "Too many cells added")
 
         cells.addOne(cell)
         cell.addConstraint(this)
     }
 
-    override def checkUpdate(value: Int): Boolean = ! markUp(value)
+    // checking for 0 is checking if the cell is empty - but markUp does not allow that value
+    override def checkUpdate(value: Int): Boolean = (value == 0 || ! markUp(value))
 
     @throws(classOf[CellContentException])
     override def update(oldValue: Int, newValue : Int): Unit = {

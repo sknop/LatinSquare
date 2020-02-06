@@ -74,7 +74,9 @@ class Cell(var limit: Int, var location: Point) {
             throw new CellContentException("Value " + value + " is larger than " + limit)
 
         // first, check contraints without changing them
-        _constraints.foreach(_.checkUpdate(value))
+        // foldLeft, because the type changes from unit.Constraint to Boolean
+        if (! _constraints.foldLeft(true)(_ & _.checkUpdate(value)))
+            throw new CellContentException(s"Value $value already in constraints")
 
         // then set constraints
         _constraints.foreach(_.update(this._value, value))

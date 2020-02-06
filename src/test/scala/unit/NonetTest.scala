@@ -26,6 +26,8 @@
 
 package unit
 
+import exceptions.CellContentException
+import latinsquare.Cell
 import org.scalatest.OneInstancePerTest
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -45,4 +47,65 @@ class NonetTest extends AnyFlatSpec with Matchers with OneInstancePerTest {
         nonet.checkUpdate(1) should be (false)
         nonet.checkUpdate(2) should be (true)
     }
+
+    it should "accept cells" in {
+        val testNonet = new Nonet("Somewhere")
+
+        val x = 1
+        for (y <- 1 to 9) {
+            val cell : Cell = new Cell(9, x, y)
+            testNonet.addCell(cell)
+        }
+        a [IllegalArgumentException] should be thrownBy {
+            val cell : Cell = new Cell(9,1,10)
+            testNonet.addCell(cell)
+        }
+    }
+
+    it should "accept cell updates" in {
+        val testNonet = new Nonet("Somewhere")
+        val cells = new Array[Cell](9)
+
+        val x = 3
+        for (y <- 1 to 9) {
+            val cell : Cell = new Cell(9, x, y)
+
+            cells(y-1) = cell
+            testNonet.addCell(cell)
+        }
+
+        for (i <- 1 to 9) {
+            cells(i-1).setValue(i)
+        }
+
+        a [CellContentException] should be thrownBy {
+            (cells(0).setValue(2))
+        }
+    }
+
+    it should "clear cells successfully" in {
+        val testNonet = new Nonet("Somewhere")
+        val cells = new Array[Cell](9)
+
+        val x = 3
+        for (y <- 1 to 9) {
+            val cell : Cell = new Cell(9, x, y)
+
+            cells(y-1) = cell
+            testNonet.addCell(cell)
+        }
+
+        for (i <- 1 to 9) {
+            cells(i-1).setValue(i)
+        }
+
+        for (i <- 1 to 9) {
+            cells(i-1).reset
+        }
+
+        for (i <- 1 to 9) {
+            cells(i-1).setValue(i)
+        }
+    }
+
 }
