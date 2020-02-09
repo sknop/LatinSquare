@@ -98,4 +98,7 @@ class Cell(var limit: Int, var location: Point) {
         c.toChar.toString
     }
 
+    def iterator : Iterator[Int] = {
+        markUp.iterator
+    }
 }

@@ -30,7 +30,7 @@ import scala.collection.mutable
 import scala.collection.immutable
 
 class MarkUp(limit : Int) {
-    private val bitSet = new mutable.BitSet(limit)
+    private val bitSet = mutable.BitSet.empty
 
     // Constructor with BitMask
     def this(limit : Int, mask : Int) {
@@ -73,6 +73,10 @@ class MarkUp(limit : Int) {
 
     def complement : MarkUp = {
         new MarkUp(limit, bitSet ^ MarkUp.allSet(limit).bitSet)
+    }
+
+    def iterator : Iterator[Int] = {
+        complement.bitSet.iterator
     }
 
     // TODO might need to add flag to make readonly - or implement second class

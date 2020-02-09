@@ -50,12 +50,13 @@ class MarkUpTest extends AnyFlatSpec with Matchers with OneInstancePerTest {
     it should "have a working complement" in {
         markUp.add(1)
         markUp.add(2)
+        markUp.add(9)
 
         val complement = markUp.complement
 
         complement(1) should be (false)
         complement(3) should be (true)
-        complement(9) should be (true)
+        complement(9) should be (false)
     }
 
     it should "throw an exception if supplied numbers outside of range" in {
@@ -64,5 +65,19 @@ class MarkUpTest extends AnyFlatSpec with Matchers with OneInstancePerTest {
         a [IllegalArgumentException] should be thrownBy {
             markUp.add(10)
         }
+    }
+
+    it should "have a working iterator" in {
+        for (i <- 2 to 6)
+            markUp.add(i)
+
+        val iterator = markUp.iterator
+        val seq = iterator.toSeq
+
+        seq(0) should be (1)
+        seq(1) should be (7)
+        seq(2) should be (8)
+        seq(3) should be (9)
+
     }
 }
