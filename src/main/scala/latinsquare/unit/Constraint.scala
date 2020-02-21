@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- *  * Copyright (c) 2019 Sven Erik Knop.
+ *  * Copyright (c) 2020 Sven Erik Knop.
  *  * Licensed under the EUPL V.1.2
  *  *
  *  * This Software is provided to You under the terms of the European
@@ -20,14 +20,14 @@
  *  * For more details, see http://joinup.ec.europa.eu/software/page/eupl.
  *  *
  *  * Contributors:
- *  *     2019 - Sven Erik Knop - initial API and implementation
+ *  *     2020 - Sven Erik Knop - initial API and implementation
  *  ******************************************************************************
  */
 
 package latinsquare.unit
 
-import latinsquare.exceptions.CellContentException
 import latinsquare.{Cell, MarkUp}
+import latinsquare.exceptions.CellContentException
 
 trait Constraint {
   def getCells : Iterable[Cell]

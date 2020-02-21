@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- *  * Copyright (c) 2019 Sven Erik Knop.
+ *  * Copyright (c) 2020 Sven Erik Knop.
  *  * Licensed under the EUPL V.1.2
  *  *
  *  * This Software is provided to You under the terms of the European
@@ -20,7 +20,7 @@
  *  * For more details, see http://joinup.ec.europa.eu/software/page/eupl.
  *  *
  *  * Contributors:
- *  *     2019 - Sven Erik Knop - initial API and implementation
+ *  *     2020 - Sven Erik Knop - initial API and implementation
  *  ******************************************************************************
  */
 
@@ -74,10 +74,17 @@ class MarkUpTest extends AnyFlatSpec with Matchers with OneInstancePerTest {
         val iterator = markUp.iterator
         val seq = iterator.toSeq
 
-        seq(0) should be (1)
-        seq(1) should be (7)
-        seq(2) should be (8)
-        seq(3) should be (9)
+        seq(0) should be (2)
+        seq(1) should be (3)
+        seq(2) should be (4)
+        seq(3) should be (5)
+        seq(4) should be (6)
+    }
 
+    it should "have the correct cardinality" in {
+        for (i <- 1 to 6)
+            markUp.add(i)
+
+        markUp.cardinality should be (3)
     }
 }

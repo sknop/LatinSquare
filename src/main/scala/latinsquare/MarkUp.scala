@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- *  * Copyright (c) 2019 Sven Erik Knop.
+ *  * Copyright (c) 2020 Sven Erik Knop.
  *  * Licensed under the EUPL V.1.2
  *  *
  *  * This Software is provided to You under the terms of the European
@@ -20,14 +20,13 @@
  *  * For more details, see http://joinup.ec.europa.eu/software/page/eupl.
  *  *
  *  * Contributors:
- *  *     2019 - Sven Erik Knop - initial API and implementation
+ *  *     2020 - Sven Erik Knop - initial API and implementation
  *  ******************************************************************************
  */
 
 package latinsquare
 
-import scala.collection.mutable
-import scala.collection.immutable
+import scala.collection.{immutable, mutable}
 
 class MarkUp(limit : Int) {
     private val bitSet = mutable.BitSet.empty
@@ -76,7 +75,11 @@ class MarkUp(limit : Int) {
     }
 
     def iterator : Iterator[Int] = {
-        complement.bitSet.iterator
+        bitSet.iterator
+    }
+
+    def cardinality : Int = {
+        complement.bitSet.size
     }
 
     // TODO might need to add flag to make readonly - or implement second class

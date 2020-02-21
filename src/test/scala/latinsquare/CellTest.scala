@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- *  * Copyright (c) 2019 Sven Erik Knop.
+ *  * Copyright (c) 2020 Sven Erik Knop.
  *  * Licensed under the EUPL V.1.2
  *  *
  *  * This Software is provided to You under the terms of the European
@@ -20,13 +20,13 @@
  *  * For more details, see http://joinup.ec.europa.eu/software/page/eupl.
  *  *
  *  * Contributors:
- *  *     2019 - Sven Erik Knop - initial API and implementation
+ *  *     2020 - Sven Erik Knop - initial API and implementation
  *  ******************************************************************************
  */
 
 package latinsquare
 
-import exceptions.CellContentException
+import latinsquare.exceptions.CellContentException
 import org.scalatest.OneInstancePerTest
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers

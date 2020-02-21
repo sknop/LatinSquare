@@ -24,20 +24,32 @@
  *  ******************************************************************************
  */
 
-package latinsquare.exceptions
+package latinsquare.sudoku
 
-class IllegalCellPositionException (message: String) extends Exception(message) {
+import latinsquare.Point
+import org.scalatest.OneInstancePerTest
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-    def this(message: String, cause: Throwable) {
-      this(message)
-      initCause(cause)
+class SudokuTest extends AnyFlatSpec  with Matchers with OneInstancePerTest {
+    behavior of "A Sudoku Puzzle"
+
+    val sudoku = new Sudoku
+
+    it should "be empty when constructed" in {
+        for (cell <- sudoku.cells.values) {
+            cell.empty should be (true)
+        }
     }
 
-    def this(cause: Throwable) {
-      this(Option(cause).map(_.toString).orNull, cause)
-    }
+    it should "accept a single value and show the correct markup" in {
+        val point : Point = new Point(1, 1)
+        val cell = sudoku.cells(point)
 
-    def this() {
-      this(null: String)
+        cell.setValue(1)
+
+        println(cell.markUp)
+        for (i <- cell.iterator)
+            println(i)
     }
 }

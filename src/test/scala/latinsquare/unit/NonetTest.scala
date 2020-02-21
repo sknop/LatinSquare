@@ -26,8 +26,8 @@
 
 package latinsquare.unit
 
-import latinsquare.exceptions.CellContentException
 import latinsquare.Cell
+import latinsquare.exceptions.CellContentException
 import org.scalatest.OneInstancePerTest
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
