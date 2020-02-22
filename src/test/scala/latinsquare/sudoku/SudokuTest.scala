@@ -38,7 +38,7 @@ class SudokuTest extends AnyFlatSpec  with Matchers with OneInstancePerTest {
 
     it should "be empty when constructed" in {
         for (cell <- sudoku.cells.values) {
-            cell.empty should be (true)
+            cell.isEmpty should be (true)
         }
     }
 
@@ -46,7 +46,7 @@ class SudokuTest extends AnyFlatSpec  with Matchers with OneInstancePerTest {
         val point : Point = new Point(1, 1)
         val cell = sudoku.cells(point)
 
-        cell.setValue(1)
+        cell.value = 1
 
         println(cell.markUp)
         for (i <- cell.iterator)

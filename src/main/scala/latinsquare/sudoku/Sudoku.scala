@@ -30,14 +30,14 @@ import com.typesafe.scalalogging.Logger
 import latinsquare.{Cell, Point, Puzzle}
 import latinsquare.unit.Nonet
 
-import scala.collection.mutable.{ArrayBuffer, Seq, StringBuilder}
+import scala.collection.mutable
 import scala.util.Random
 
 class Sudoku extends Puzzle(9) {
     private val logger = Logger[Sudoku]
-    private val rows = new ArrayBuffer[Nonet]()
-    private val columns = new ArrayBuffer[Nonet]()
-    private val boxes = new ArrayBuffer[Nonet]()
+    private val rows = new mutable.ArrayBuffer[Nonet]()
+    private val columns = new mutable.ArrayBuffer[Nonet]()
+    private val boxes = new mutable.ArrayBuffer[Nonet]()
 
     for (x <- 1 to 9) {
         for (y <- 1 to 9) {
@@ -97,7 +97,7 @@ class Sudoku extends Puzzle(9) {
     }
 
     override def toString: String = {
-        val builder = new StringBuilder
+        val builder = new mutable.StringBuilder
 
         addNonet("Rows", rows, builder)
         addNonet("Columns", columns, builder)
@@ -106,7 +106,7 @@ class Sudoku extends Puzzle(9) {
         builder.toString()
     }
 
-    private def addNonet(name : String, nonets : Seq[Nonet], builder : StringBuilder) : Unit = {
+    private def addNonet(name : String, nonets : mutable.Seq[Nonet], builder : mutable.StringBuilder) : Unit = {
         builder ++= name
         builder ++= "\n"
 
@@ -116,8 +116,8 @@ class Sudoku extends Puzzle(9) {
         }
     }
 
-    override def createRandomPuzzle: Unit = {
-        reset
+    override def createRandomPuzzle() : Unit = {
+        reset()
 
         val random = new Random
 
@@ -138,24 +138,33 @@ class Sudoku extends Puzzle(9) {
             val seed = Random.shuffle(List(1, 2, 3, 4, 5, 6, 7, 8, 9))
             for (c <- 0 until 9) {
                 val cell = cells(c)
-                cell.setValue(seed(c))
+                cell.value = seed(c)
             }
         }
 
         solveBruteForce // this fills the whole of the Sudoku puzzle
 
         // now remove entries until the solution is not unique anymore
-        // TODO
+        val allCells = Random.shuffle(cells.values.toList)
+
+        for (cell <- allCells) {
+            val value = cell.value
+
+            cell.reset()
+            if (isUnique > 1) {
+                cell.value = value
+            }
+        }
+
+        allCells.foreach(_.readOnly = true)
     }
-
-
 }
 
 object Sudoku {
     def main(args : Array[String]) : Unit = {
         val sudoku = new Sudoku
 
-        sudoku.createRandomPuzzle
+        sudoku.createRandomPuzzle()
 
         println(sudoku)
     }

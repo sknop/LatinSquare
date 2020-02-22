@@ -75,11 +75,11 @@ class NonetTest extends AnyFlatSpec with Matchers with OneInstancePerTest {
         }
 
         for (i <- 1 to 9) {
-            cells(i-1).setValue(i)
+            cells(i-1).value = i
         }
 
         a [CellContentException] should be thrownBy {
-            (cells(0).setValue(2))
+            cells(0).value = 2
         }
     }
 
@@ -96,15 +96,15 @@ class NonetTest extends AnyFlatSpec with Matchers with OneInstancePerTest {
         }
 
         for (i <- 1 to 9) {
-            cells(i-1).setValue(i)
+            cells(i-1).value = i
         }
 
         for (i <- 1 to 9) {
-            cells(i-1).reset
+            cells(i-1).reset()
         }
 
         for (i <- 1 to 9) {
-            cells(i-1).setValue(i)
+            cells(i-1).value = i
         }
     }
 

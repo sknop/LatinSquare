@@ -39,50 +39,50 @@ class CellTest extends AnyFlatSpec
     val cell = new Cell(9,1,2)
 
     it should "be empty on creation" in {
-        cell.empty should be (true)
+        cell.isEmpty should be (true)
     }
 
     it should "be writable on creation" in {
-        cell.readonly should be (false)
+        cell.readOnly should be (false)
     }
 
     it should "accept a value below the limit" in {
-        cell.setValue(3)
+        cell.value = 3
     }
 
     it should "throw exception if setting a value larger than limit" in {
         a [CellContentException] should be thrownBy {
-            cell.setValue(10)
+            cell.value = 10
         }
     }
 
     it should "have the correct String representation" in {
-        cell.setValue(3)
+        cell.value = 3
 
         cell.toString should be ("(1,2):3")
     }
 
     it should "reset without errors" in {
-        cell.setValue(3)
+        cell.value = 3
 
         cell.value should be (3)
 
-        cell.reset
+        cell.reset()
 
         cell.value should be (0)
     }
 
     it should "be able to be set to readonly and back" in {
-        cell.setValue(3)
+        cell.value = 3
 
-        cell.readonly should be (false)
+        cell.readOnly should be (false)
 
-        cell.readonly_(true)
+        cell.readOnly = true
 
-        cell.readonly should be (true)
+        cell.readOnly should be (true)
 
-        cell.readonly_((false))
+        cell.readOnly = false
 
-        cell.readonly should be (false)
+        cell.readOnly should be (false)
     }
 }

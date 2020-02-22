@@ -16,4 +16,4 @@ libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
 
 scalacOptions += "-deprecation"
 
-// logLevel := util.Level.Debug
+logLevel := util.Level.Warn

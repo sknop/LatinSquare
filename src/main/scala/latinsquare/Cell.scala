@@ -34,40 +34,39 @@ import scala.collection.mutable.ArrayBuffer
 class Cell(var limit: Int, var location: Point) {
 
     private var _value : Int = 0
-    private var _readOnly: Boolean = false
+    private var _readOnly : Boolean = false
     private val _constraints = new ArrayBuffer[Constraint]
 
     def this(limit: Int, x: Int, y: Int) {
         this(limit, Point(x, y))
     }
 
-    def readonly: Boolean = _readOnly
-
-    def empty: Boolean = (_value == 0)
-
     def value : Int = _value
+    def readOnly : Boolean = _readOnly
 
-    def readonly_(flag : Boolean) : Unit = {
-        if (flag && _value != 0)
+    def isEmpty: Boolean = value == 0
+
+    def readOnly_=(flag : Boolean) : Unit = {
+        if (flag && value != 0)
             _readOnly = true
-        else if (_value != 0)
+        else if (value != 0)
             _readOnly = false
     }
 
-    def reset : Unit = {
+    def reset() : Unit = {
         _readOnly = false
-        setValue(0)
+        value = 0
     }
 
     def markUp : MarkUp = {
-        var result : MarkUp = MarkUp.allSet(limit)
+        val result : MarkUp = MarkUp.allSet(limit)
 
         _constraints.foldLeft(result)((x,y) => x -- y.markup)
     }
 
     @throws(classOf[CellContentException])
-    def setValue(value: Int): Unit = {
-        if (_readOnly)
+    def value_=(value: Int): Unit = {
+        if (readOnly)
             throw new CellContentException(this.toString + " is read only")
 
         if (value > limit)
@@ -79,21 +78,21 @@ class Cell(var limit: Int, var location: Point) {
             throw new CellContentException(s"Value $value already in constraints")
 
         // then set constraints
-        _constraints.foreach(_.update(this._value, value))
+        _constraints.foreach(_.update(this.value, value))
 
         this._value = value
     }
 
-    def addConstraint(constraint: Constraint) =
+    def addConstraint(constraint: Constraint) : Unit =
         _constraints += constraint
 
-    def removeConstraint(constraint: Constraint) =
+    def removeConstraint(constraint: Constraint) : Unit =
         _constraints -= constraint
 
     override def toString: String = location.toString + ":" + getValueAsString
 
     def getValueAsString: String = {
-        val c: Int = if (_value < 10) ('0' + _value) else ('A' + _value - 10)
+        val c: Int = if (value < 10) '0' + value else 'A' + value - 10
 
         c.toChar.toString
     }

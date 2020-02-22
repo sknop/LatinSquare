@@ -26,6 +26,8 @@
 
 package latinsquare.unit
 
+import latinsquare.Cell
+
 class Nonet(position : String) extends AbstractConstraint(9, position) {
     override def toString: String = "Nonet " + super.toString
 }

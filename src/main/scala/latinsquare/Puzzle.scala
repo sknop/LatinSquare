@@ -34,71 +34,73 @@ abstract class Puzzle(val maxValue : Int) {
     private val logger = Logger[Puzzle]
     val cells = new mutable.HashMap[Point, Cell]()
 
-    def isSolved : Boolean = ! cells.exists(_._2.empty)
+    def isSolved : Boolean = ! cells.exists(_._2.isEmpty)
 
-    def createRandomPuzzle : Unit
+    def createRandomPuzzle() : Unit
 
-    def reset : Unit = {
-        cells.values.foreach(_.reset)
+    def reset() : Unit = {
+        cells.values.foreach(_.reset())
     }
 
     def solveBruteForce : Boolean = {
-        solveRecursive(emptyCells)
+        solveRecursive(sortedEmptyCells)
     }
 
     def isUnique : Int = {
-        uniqueRecursive(emptyCells, 0)
+        uniqueRecursive(sortedEmptyCells, 0)
     }
 
     // private methods
 
-    private def emptyCells : List[Cell] = {
-        cells.values.filter(_.empty).toList.sortBy(_.location)
+    private def sortedEmptyCells : List[Cell] = {
+        cells.values.
+          filter(_.isEmpty).
+          toList.
+          sortBy(_.markUp.cardinality)
     }
 
     private def solveRecursive(empties: List[Cell]) : Boolean = {
-        if (empties.size == 0) return true
+        if (empties.isEmpty) return true
 
         val head : Cell = empties.head
         val tail : List[Cell] = empties.tail
 
         for (i <- head.iterator) {
-            logger.debug(s"Setting $head to $i")
-            head.setValue(i)
+            head.value = i
 
             val sortedTail = tail.sortBy(_.markUp.cardinality)
 
             if (solveRecursive(sortedTail))
                 return true
 
-            logger.debug(s"Resetting $head")
-            head.reset
+            head.reset()
         }
 
         false
     }
 
     private def uniqueRecursive(empties: List[Cell], solutions : Int) : Int = {
-        if (empties.size == 0)
+        if (empties.isEmpty)
             return solutions + 1
 
         val head : Cell = empties.head
         val tail : List[Cell] = empties.tail
+        var result = solutions
 
         for (i <- head.iterator) {
-            head.setValue(i)
+            head.value = i
 
             val sortedTail = tail.sortBy(_.markUp.cardinality)
-            val result = uniqueRecursive(sortedTail, solutions)
+            result = uniqueRecursive(sortedTail, result)
             if (result > 1) {
-                head.reset // need to reset, otherwise puzzle is solved
+                head.reset() // need to reset, otherwise puzzle is solved
                 return result
             }
 
-            head.reset
+            head.reset()
         }
 
-        solutions
+        result
     }
 
 }

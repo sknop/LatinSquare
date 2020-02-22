@@ -32,8 +32,8 @@ import latinsquare.{Cell, MarkUp}
 import scala.collection.mutable.ArrayBuffer
 
 abstract class AbstractConstraint protected (size : Int, position : String) extends Constraint {
-    protected var cells = new ArrayBuffer[Cell](size)
-    protected var markUp = new MarkUp(size)
+    protected val cells = new ArrayBuffer[Cell](size)
+    protected val markUp = new MarkUp(size)
 
     override def getCells: Seq[Cell] = cells.toSeq
 
@@ -45,7 +45,7 @@ abstract class AbstractConstraint protected (size : Int, position : String) exte
     }
 
     // checking for 0 is checking if the cell is empty - but markUp does not allow that value
-    override def checkUpdate(value: Int): Boolean = (value == 0 || ! markUp(value))
+    override def checkUpdate(value: Int): Boolean = value == 0 || ! markUp(value)
 
     @throws(classOf[CellContentException])
     override def update(oldValue: Int, newValue : Int): Unit = {
