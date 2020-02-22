@@ -17,3 +17,6 @@ libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
 scalacOptions += "-deprecation"
 
 logLevel := util.Level.Warn
+
+// [Required] Enable plugin and automatically find def main(args:Array[String]) methods from the classpath
+enablePlugins(PackPlugin)
