@@ -39,6 +39,8 @@ class Sudoku extends Puzzle(9) {
     private val columns = new mutable.ArrayBuffer[Nonet]()
     private val boxes = new mutable.ArrayBuffer[Nonet]()
 
+    // Initialisation
+
     for (x <- 1 to 9) {
         for (y <- 1 to 9) {
             val point = new Point(x, y)
