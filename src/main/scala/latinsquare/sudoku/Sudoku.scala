@@ -30,7 +30,7 @@ import com.typesafe.scalalogging.Logger
 import latinsquare.{Cell, Point, Puzzle}
 import latinsquare.unit.Nonet
 
-import scala.collection.mutable.{ArrayBuffer, Seq}
+import scala.collection.mutable.{ArrayBuffer, Seq, StringBuilder}
 import scala.util.Random
 
 class Sudoku extends Puzzle(9) {
@@ -77,7 +77,7 @@ class Sudoku extends Puzzle(9) {
 
     for (x1 <- 0 until 3) {
         for (y1 <- 0 until 3) {
-            val box = new Nonet(s"Box $x1+1/y1+1")
+            val box = new Nonet(s"Box ${x1+1}/${y1+1}")
             boxes.addOne(box)
 
             for (x2 <- 1 to 3) {
@@ -107,12 +107,12 @@ class Sudoku extends Puzzle(9) {
     }
 
     private def addNonet(name : String, nonets : Seq[Nonet], builder : StringBuilder) : Unit = {
-        builder ++ name
-        builder ++ "\n"
+        builder ++= name
+        builder ++= "\n"
 
         for (nonet <- nonets) {
-            builder ++ nonet.toString
-            builder ++ "\n"
+            builder ++= nonet.toString
+            builder ++= "\n"
         }
     }
 

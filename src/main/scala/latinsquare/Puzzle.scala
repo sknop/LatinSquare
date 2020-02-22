@@ -26,9 +26,12 @@
 
 package latinsquare
 
+import com.typesafe.scalalogging.Logger
+
 import scala.collection.mutable
 
 abstract class Puzzle(val maxValue : Int) {
+    private val logger = Logger[Puzzle]
     val cells = new mutable.HashMap[Point, Cell]()
 
     def isSolved : Boolean = ! cells.exists(_._2.empty)
@@ -49,16 +52,18 @@ abstract class Puzzle(val maxValue : Int) {
 
     // private methods
 
-    private def emptyCells : mutable.Stack[Cell] = {
-        mutable.Stack.from(cells.values.filter(_.empty).toList.sortBy(_.location))
+    private def emptyCells : List[Cell] = {
+        cells.values.filter(_.empty).toList.sortBy(_.location)
     }
 
-    private def solveRecursive(tail: mutable.Stack[Cell]) : Boolean = {
-        if (tail.size == 0) true
+    private def solveRecursive(empties: List[Cell]) : Boolean = {
+        if (empties.size == 0) return true
 
-        val head : Cell = tail.pop
+        val head : Cell = empties.head
+        val tail : List[Cell] = empties.tail
 
         for (i <- head.iterator) {
+            logger.debug(s"Setting $head to $i")
             head.setValue(i)
 
             val sortedTail = tail.sortBy(_.markUp.cardinality)
@@ -66,18 +71,19 @@ abstract class Puzzle(val maxValue : Int) {
             if (solveRecursive(sortedTail))
                 return true
 
+            logger.debug(s"Resetting $head")
             head.reset
         }
 
-        tail.push(head)
         false
     }
 
-    private def uniqueRecursive(tail: mutable.Stack[Cell], solutions : Int) : Int = {
-        if (tail.size == 0)
+    private def uniqueRecursive(empties: List[Cell], solutions : Int) : Int = {
+        if (empties.size == 0)
             return solutions + 1
 
-        val head : Cell = tail.pop
+        val head : Cell = empties.head
+        val tail : List[Cell] = empties.tail
 
         for (i <- head.iterator) {
             head.setValue(i)
@@ -91,8 +97,6 @@ abstract class Puzzle(val maxValue : Int) {
 
             head.reset
         }
-
-        tail.push(head) // back to front of queue
 
         solutions
     }

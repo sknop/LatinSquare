@@ -79,7 +79,7 @@ class MarkUp(limit : Int) {
     }
 
     def cardinality : Int = {
-        complement.bitSet.size
+        bitSet.size
     }
 
     // TODO might need to add flag to make readonly - or implement second class

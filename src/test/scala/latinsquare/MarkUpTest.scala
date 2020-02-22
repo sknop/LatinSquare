@@ -85,6 +85,6 @@ class MarkUpTest extends AnyFlatSpec with Matchers with OneInstancePerTest {
         for (i <- 1 to 6)
             markUp.add(i)
 
-        markUp.cardinality should be (3)
+        markUp.cardinality should be (6)
     }
 }

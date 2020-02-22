@@ -64,6 +64,6 @@ abstract class AbstractConstraint protected (size : Int, position : String) exte
     override def markup: MarkUp = markUp.toImmutable
 
     override def toString: String = {
-        s"($position) $cells number : $markUp.complement"
+        s"($position) $cells number : ${markUp.complement}"
     }
 }
