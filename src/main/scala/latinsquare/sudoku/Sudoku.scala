@@ -29,6 +29,9 @@ package latinsquare.sudoku
 import com.typesafe.scalalogging.Logger
 import latinsquare.{Cell, Point, Puzzle}
 import latinsquare.unit.Nonet
+import latinsquare.exceptions.IllegalFileFormatException
+
+import org.rogach.scallop._
 
 import scala.collection.mutable
 import scala.util.Random
@@ -108,6 +111,49 @@ class Sudoku extends Puzzle(9) {
         builder.toString()
     }
 
+    override def dimension: Int = 9
+
+    override def importStrings(lines: Array[String]): Unit = {
+        val values = Array.ofDim[Int](dimension, dimension)
+
+        var row : Int = 0
+
+        for (line <- lines) {
+            val lineValues = line.split(",")
+            if (lineValues.length != dimension) {
+                throw new IllegalFileFormatException(s"Illegal entry in file : $line")
+            }
+
+            for (col <- 0 until 9) {
+                values(row)(col) = lineValues(col).toInt
+            }
+
+            row += 1
+        }
+
+        reset()
+
+        importArray(values)
+    }
+
+    def importArray(values : Array[Array[Int]]) : Unit = {
+        for (row <- 0 until 9) {
+            for (col <- 0 until 9) {
+                val point : Point = new Point(row + 1, col + 1)
+                val value : Int = values(row)(col)
+
+                if (value > 0) {
+                    val cellOpt = cells.get(point)
+
+                    cellOpt match {
+                        case Some(cell) => cell.value = value
+                        case None => logger.error("Should never happen @" + sourcecode.File + ":" + sourcecode.Line)
+                    }
+                }
+            }
+        }
+    }
+
     private def addNonet(name : String, nonets : mutable.Seq[Nonet], builder : mutable.StringBuilder) : Unit = {
         builder ++= name
         builder ++= "\n"
@@ -162,11 +208,25 @@ class Sudoku extends Puzzle(9) {
     }
 }
 
+class Conf(arguments: Array[String]) extends ScallopConf(arguments.toIndexedSeq) {
+    version("Sudoku 0.1 (C) 2020 Sven Erik Knop")
+    banner("""Sudoku puzzle solver and generator""")
+    val input : ScallopOption[String] = opt[String](descr = "Filename pointing to a file with a Sudoku puzzle in CSV form")
+    verify()
+}
+
 object Sudoku {
     def main(args : Array[String]) : Unit = {
+        val conf = new Conf(args)
+
         val sudoku = new Sudoku
 
-        sudoku.createRandomPuzzle()
+        if (conf.input.isSupplied) {
+            sudoku.importFile(conf.input())
+        }
+        else {
+            sudoku.createRandomPuzzle()
+        }
 
         println(sudoku)
     }

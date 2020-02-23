@@ -13,6 +13,10 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "3.1.0" % "test"
 // Logging
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3"
 libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
+libraryDependencies += "com.lihaoyi" %% "sourcecode" % "0.1.9"
+
+// Argument Parsing
+libraryDependencies += "org.rogach" %% "scallop" % "3.3.2"
 
 scalacOptions += "-deprecation"
 

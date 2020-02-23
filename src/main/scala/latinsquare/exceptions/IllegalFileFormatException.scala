@@ -26,8 +26,8 @@
 
 package latinsquare.exceptions
 
-class CellContentException (message: String) extends Exception(message) {
-  def this() {
-    this(null: String)
-  }
+class IllegalFileFormatException(message : String) extends Exception(message) {
+    def this() {
+        this(null: String)
+    }
 }

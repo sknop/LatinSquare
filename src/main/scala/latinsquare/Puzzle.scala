@@ -29,6 +29,7 @@ package latinsquare
 import com.typesafe.scalalogging.Logger
 
 import scala.collection.mutable
+import scala.io.Source
 
 abstract class Puzzle(val maxValue : Int) {
     private val logger = Logger[Puzzle]
@@ -37,6 +38,19 @@ abstract class Puzzle(val maxValue : Int) {
     def isSolved : Boolean = ! cells.exists(_._2.isEmpty)
 
     def createRandomPuzzle() : Unit
+
+    def importFile(fileName : String) : Unit = {
+        val source = Source.fromFile(fileName)
+        val lines = source.getLines().toArray
+
+        importStrings(lines)
+
+        source.close()
+    }
+
+    def importStrings(lines : Array[String]) : Unit
+
+    def dimension : Int
 
     def reset() : Unit = {
         cells.values.foreach(_.reset())
