@@ -26,6 +26,8 @@
 
 package latinsquare
 
+import java.io.FileNotFoundException
+
 import com.typesafe.scalalogging.Logger
 
 import scala.collection.mutable
@@ -40,12 +42,17 @@ abstract class Puzzle(val maxValue : Int) {
     def createRandomPuzzle() : Unit
 
     def importFile(fileName : String) : Unit = {
-        val source = Source.fromFile(fileName)
-        val lines = source.getLines().toArray
+        try {
+            val source = Source.fromFile(fileName)
+            val lines = source.getLines().toArray
 
-        importStrings(lines)
+            importStrings(lines)
 
-        source.close()
+            source.close()
+        }
+        catch  {
+            case e: FileNotFoundException => println("Cannot find file " + fileName); throw e
+        }
     }
 
     def importStrings(lines : Array[String]) : Unit

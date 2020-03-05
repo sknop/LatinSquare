@@ -18,6 +18,9 @@ libraryDependencies += "com.lihaoyi" %% "sourcecode" % "0.1.9"
 // Argument Parsing
 libraryDependencies += "org.rogach" %% "scallop" % "3.3.2"
 
+// Class Util
+libraryDependencies += "org.clapper" %% "classutil" % "1.5.0"
+
 scalacOptions += "-deprecation"
 
 logLevel := util.Level.Warn

@@ -208,15 +208,15 @@ class Sudoku extends Puzzle(9) {
     }
 }
 
-class Conf(arguments: Array[String]) extends ScallopConf(arguments.toIndexedSeq) {
-    version("Sudoku 0.1 (C) 2020 Sven Erik Knop")
-    banner("""Sudoku puzzle solver and generator""")
-    val input : ScallopOption[String] = opt[String](descr = "Filename pointing to a file with a Sudoku puzzle in CSV form")
-    verify()
-}
-
 object Sudoku {
     def main(args : Array[String]) : Unit = {
+        class Conf(arguments: Array[String]) extends ScallopConf(arguments.toIndexedSeq) {
+            version("Sudoku 0.1 (C) 2020 Sven Erik Knop")
+            banner("""Sudoku puzzle solver and generator""")
+            val input : ScallopOption[String] = opt[String](descr = "Filename pointing to a file with a Sudoku puzzle in CSV form")
+            verify()
+        }
+
         val conf = new Conf(args)
 
         val sudoku = new Sudoku
@@ -228,6 +228,15 @@ object Sudoku {
             sudoku.createRandomPuzzle()
         }
 
+        println("Puzzle :")
+        println("")
+
+        println(sudoku)
+
+        sudoku.solveBruteForce
+
+        println("Solution :")
+        println("")
         println(sudoku)
     }
 }
