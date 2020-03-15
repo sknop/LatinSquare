@@ -31,6 +31,8 @@ import latinsquare.{Cell, Point, Puzzle}
 import latinsquare.unit.Nonet
 import latinsquare.exceptions.IllegalFileFormatException
 
+import Puzzle._
+
 import org.rogach.scallop._
 
 import scala.collection.mutable
@@ -104,11 +106,35 @@ class Sudoku extends Puzzle(9) {
     override def toString: String = {
         val builder = new mutable.StringBuilder
 
-        addNonet("Rows", rows, builder)
-        addNonet("Columns", columns, builder)
-        addNonet("Boxes", boxes, builder)
+        builder.append("    1 2 3   4 5 6   7 8 9\n")
+        bigBorder(builder, 3); builder.append("\n")
+
+        for (row <- 1 to 9) {
+            builder.append(s"$row")
+            builder.append(Front)
+
+            for (section <- 0 until 3) {
+                drawOneSection(builder, row, section)
+            }
+            builder.append("\n")
+
+            if ( row == 3 || row == 6) {
+                littleBorder(builder, 3); builder.append("\n")
+            }
+        }
+        bigBorder(builder, 3); builder.append("\n")
 
         builder.toString()
+    }
+
+    private def drawOneSection(builder : mutable.StringBuilder, row : Int, section : Int) : Unit = {
+        val y = section * 3
+
+        val x1 = valueAsString(row, y + 1)
+        val x2 = valueAsString(row, y + 2)
+        val x3 = valueAsString(row, y + 3)
+
+        builder.append(Section.format(x1,x2,x3))
     }
 
     override def dimension: Int = 9

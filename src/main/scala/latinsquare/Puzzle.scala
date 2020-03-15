@@ -71,6 +71,38 @@ abstract class Puzzle(val maxValue : Int) {
         uniqueRecursive(sortedEmptyCells, 0)
     }
 
+    def value(x : Int, y : Int) : Int = {
+        value(new Point(x,y))
+    }
+
+    def value(p : Point) : Int = {
+        cells(p).value
+    }
+
+    // protected methods (mostly for drawing)
+
+    protected def bigBorder(builder : mutable.StringBuilder, size : Int) : Unit = {
+        builder.append("  +")
+        builder.append("-" * (2 * (size * size + size) - 1))
+        builder.append("+")
+    }
+
+    protected def littleBorder(builder : mutable.StringBuilder, size : Int) : Unit = {
+        builder.append("  |")
+        builder.append("-" * (size * 2 + 1))
+        for (_ <- 1 until size) {
+            builder.append("+")
+            builder.append("-" * (size * 2 + 1))
+        }
+        builder.append("|")
+    }
+
+    protected def valueAsString(x : Int, y : Int) : String = {
+        val v = value(x, y)
+
+        NumberConverter.valueAsString(v)
+    }
+
     // private methods
 
     private def sortedEmptyCells : List[Cell] = {
@@ -123,5 +155,9 @@ abstract class Puzzle(val maxValue : Int) {
 
         result
     }
+}
 
+object Puzzle {
+    val Front = " |"
+    val Section = " %s %s %s |"
 }
