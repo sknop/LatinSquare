@@ -59,12 +59,7 @@ class Sudoku extends Puzzle(9) {
         rows.addOne(row)
 
         for (y <- 1 to 9) {
-            val point = new Point(x, y)
-            val cellOpt = cells.get(point)
-            cellOpt match {
-                case Some(cell) => row.addCell(cell)
-                case None => logger.error(s"Cannot find Cell for $point, should never happen")
-            }
+            addPointIntoNonet(x, y, row)
         }
     }
 
@@ -73,12 +68,7 @@ class Sudoku extends Puzzle(9) {
         columns.addOne(column)
 
         for (x <- 1 to 9) {
-            val point = new Point(x, y)
-            val cellOpt = cells.get(point)
-            cellOpt match {
-                case Some(cell) => column.addCell(cell)
-                case None => logger.error(s"Cannot find Cell for $point, should never happen")
-            }
+            addPointIntoNonet(x, y, column)
         }
     }
 
@@ -92,14 +82,18 @@ class Sudoku extends Puzzle(9) {
                 for (y2 <- 1 to 3) {
                     val y = y1 * 3 + y2
 
-                    val point = new Point(x, y)
-                    val cellOpt = cells.get(point)
-                    cellOpt match {
-                        case Some(cell) => box.addCell(cell)
-                        case None => logger.error(s"Cannot find Cell for $point, should never happen")
-                    }
+                    addPointIntoNonet(x, y, box)
                 }
             }
+        }
+    }
+
+    def addPointIntoNonet(x : Int, y : Int, nonet : Nonet) : Unit = {
+        val point = new Point(x, y)
+        val cellOpt = cells.get(point)
+        cellOpt match {
+            case Some(cell) => nonet.addCell(cell)
+            case None => logger.error(s"Cannot find Cell for $point, should never happen")
         }
     }
 
@@ -180,15 +174,15 @@ class Sudoku extends Puzzle(9) {
         }
     }
 
-    private def addNonet(name : String, nonets : mutable.Seq[Nonet], builder : mutable.StringBuilder) : Unit = {
-        builder ++= name
-        builder ++= "\n"
-
-        for (nonet <- nonets) {
-            builder ++= nonet.toString
-            builder ++= "\n"
-        }
-    }
+//    private def addNonet(name : String, nonets : mutable.Seq[Nonet], builder : mutable.StringBuilder) : Unit = {
+//        builder ++= name
+//        builder ++= "\n"
+//
+//        for (nonet <- nonets) {
+//            builder ++= nonet.toString
+//            builder ++= "\n"
+//        }
+//    }
 
     override def createRandomPuzzle() : Unit = {
         reset()

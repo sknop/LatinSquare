@@ -26,29 +26,73 @@
 
 package latinsquare
 
-import org.clapper.classutil.{ClassFinder, ClassInfo}
+import java.io.File
 
-class CLI {
+import org.clapper.classutil.ClassFinder
 
+import scala.util.Try
+import scala.reflect.runtime.universe._
+
+class CLI(plugins : List[String]) {
+
+    for (plugin <- plugins) {
+        println(plugin)
+        newInstance(plugin) match  {
+            case Some(p) => p.createRandomPuzzle(); println(p)
+            case None => println("Cannot instantiate")
+        }
+    }
+
+    def newInstance(className : String) : Option[Puzzle] = Try {
+        if (className.endsWith("$")) {
+            val m = runtimeMirror(getClass.getClassLoader)
+            m.reflectModule(m.staticModule(className.init)).instance.asInstanceOf[Puzzle]
+        }
+        else {
+            Class.forName(className).getDeclaredConstructor().newInstance().asInstanceOf[Puzzle]
+        }
+    }.toOption
 }
 
 object CLI {
     def main(args: Array[String]): Unit = {
-        val finder = ClassFinder()
+        disableUnchecked()
+
+        lookForStuff()
+    }
+
+    def disableUnchecked() : Unit =
+        try {
+            val unsafeClass = Class.forName("sun.misc.Unsafe")
+            val field = unsafeClass.getDeclaredField("theUnsafe")
+            field.setAccessible(true)
+            val unsafe = field.get(null)
+
+            val putObjectVolatile = unsafeClass.getDeclaredMethod("putObjectVolatile", classOf[Object], classOf[Long], classOf[Object])
+            val staticFieldOffset = unsafeClass.getDeclaredMethod("staticFieldOffset", classOf[java.lang.reflect.Field])
+
+            val loggerClass = Class.forName("jdk.internal.module.IllegalAccessLogger")
+            val loggerField = loggerClass.getDeclaredField("logger")
+            val offset = staticFieldOffset.invoke(unsafe, loggerField)
+            putObjectVolatile.invoke(unsafe, loggerClass, offset, null)
+        }
+        catch {
+            case _ : Throwable => // ignored
+        }
+
+    def lookForStuff() : Unit = {
+        val path : String = CLI.getClass.getProtectionDomain.getCodeSource.getLocation.getPath
+        println("Path found " + path)
+
+        val finder = ClassFinder(List(path).map(new File(_)))
         val classes = finder.getClasses()
         val classMap = ClassFinder.classInfoMap(classes)
 
-        val plugins = ClassFinder.concreteSubclasses("latinsquare.Puzzle", classMap)
-        println("Puzzles: ")
-        plugins.foreach(println)
+        val plugins = ClassFinder.concreteSubclasses("latinsquare.Puzzle", classMap).collect { p => p.name }.toList
 
-        val constraints = ClassFinder.concreteSubclasses("latinsquare.unit.Constraint", classMap)
-        println("Constraints:")
-
-        for (c : ClassInfo <- constraints) {
-            println(c)
-            println("Interfaces : " + c.interfaces)
-            println("Superclass : " + c.superClassName)
+        println("Puzzles:")
+        for (plugin <- plugins) {
+            println("  " + plugin)
         }
     }
 }
