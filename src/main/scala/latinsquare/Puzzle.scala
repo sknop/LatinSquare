@@ -26,7 +26,7 @@
 
 package latinsquare
 
-import java.io.FileNotFoundException
+import java.io.{File, FileNotFoundException, PrintWriter}
 
 import com.typesafe.scalalogging.Logger
 
@@ -51,11 +51,25 @@ abstract class Puzzle(val maxValue : Int) {
             source.close()
         }
         catch  {
-            case e: FileNotFoundException => println("Cannot find file " + fileName); throw e
+            case e: FileNotFoundException => System.err.println("Cannot find file " + fileName); throw e
+        }
+    }
+
+    def exportFile(filename: String) : Unit = {
+        try {
+            val writer = new PrintWriter(new File(filename))
+            writeString(writer)
+
+            writer.close()
+        }
+        catch {
+            case e : FileNotFoundException => System.err.println("Cannot write to file " + filename); throw e
         }
     }
 
     def importStrings(lines : Array[String]) : Unit
+
+    def writeString(writer : PrintWriter) : Unit
 
     def dimension : Int
 

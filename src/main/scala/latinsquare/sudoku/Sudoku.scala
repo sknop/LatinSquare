@@ -26,13 +26,13 @@
 
 package latinsquare.sudoku
 
+import java.io.PrintWriter
+
 import com.typesafe.scalalogging.Logger
 import latinsquare.{Cell, Point, Puzzle}
 import latinsquare.unit.Nonet
 import latinsquare.exceptions.IllegalFileFormatException
-
 import Puzzle._
-
 import org.rogach.scallop._
 
 import scala.collection.mutable
@@ -226,6 +226,19 @@ class Sudoku extends Puzzle(9) {
 
         allCells.foreach(_.readOnly = true)
     }
+
+    override def writeString(writer: PrintWriter): Unit = {
+        for (row <- 1 to 9) {
+            writer.append(Integer.toString(value(row,1)))
+            for (col <- 2 to 9) {
+                writer.append(',')
+                writer.append(Integer.toString(value(row,col)))
+            }
+            writer.append('\n')
+        }
+    }
+
+
 }
 
 object Sudoku {
@@ -234,6 +247,7 @@ object Sudoku {
             version("Sudoku 0.1 (C) 2020 Sven Erik Knop")
             banner("""Sudoku puzzle solver and generator""")
             val input : ScallopOption[String] = opt[String](descr = "Filename pointing to a file with a Sudoku puzzle in CSV form")
+            val output : ScallopOption[String] = opt[String](descr = "Filename pointing to a file where a random puzzle will be stored")
             verify()
         }
 
@@ -246,6 +260,10 @@ object Sudoku {
         }
         else {
             sudoku.createRandomPuzzle()
+
+            if (conf.output.isSupplied) {
+                sudoku.exportFile(conf.output())
+            }
         }
 
         println("Puzzle :")
