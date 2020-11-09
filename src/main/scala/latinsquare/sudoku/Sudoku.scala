@@ -30,7 +30,7 @@ import java.io.PrintWriter
 
 import com.typesafe.scalalogging.Logger
 import latinsquare.{Cell, Point, Puzzle}
-import latinsquare.unit.Nonet
+import latinsquare.constraints.Nonet
 import latinsquare.exceptions.IllegalFileFormatException
 import Puzzle._
 import org.rogach.scallop._
@@ -131,16 +131,14 @@ class Sudoku extends Puzzle(9) {
         builder.append(Section.format(x1,x2,x3))
     }
 
-    override def dimension: Int = 9
-
     override def importStrings(lines: Array[String]): Unit = {
-        val values = Array.ofDim[Int](dimension, dimension)
+        val values = Array.ofDim[Int](maxValue, maxValue)
 
         var row : Int = 0
 
         for (line <- lines) {
             val lineValues = line.split(",")
-            if (lineValues.length != dimension) {
+            if (lineValues.length != maxValue) {
                 throw new IllegalFileFormatException(s"Illegal entry in file : $line")
             }
 
@@ -185,6 +183,8 @@ class Sudoku extends Puzzle(9) {
 //    }
 
     override def createRandomPuzzle() : Unit = {
+        logger.info("Create Random Sudoku Puzzle")
+
         reset()
 
         val random = new Random
@@ -227,7 +227,7 @@ class Sudoku extends Puzzle(9) {
         allCells.foreach(_.readOnly = true)
     }
 
-    override def writeString(writer: PrintWriter): Unit = {
+    override def writeStrings(writer: PrintWriter): Unit = {
         for (row <- 1 to 9) {
             writer.append(Integer.toString(value(row,1)))
             for (col <- 2 to 9) {

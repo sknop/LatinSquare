@@ -59,7 +59,7 @@ class MarkUp(limit : Int) {
         bitSet -= number
     }
 
-    // check existance of a number, can be used as MarkUp()
+    // check existence of a number, can be used as MarkUp()
     def apply(number : Int) : Boolean = {
         require(number > 0 && number <= limit, s"Supplied number $number outside of ]0,$limit]")
         bitSet(number)

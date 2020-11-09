@@ -45,6 +45,12 @@ class MarkUpTest extends AnyFlatSpec with Matchers with OneInstancePerTest {
         markUp.clear(1)
 
         markUp(1) should be (false)
+
+        markUp(5) should be (false)
+
+        markUp.add(5)
+
+        markUp(5) should be (true)
     }
 
     it should "have a working complement" in {

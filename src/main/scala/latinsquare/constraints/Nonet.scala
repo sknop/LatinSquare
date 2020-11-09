@@ -24,18 +24,8 @@
  *  ******************************************************************************
  */
 
-package latinsquare.unit
+package latinsquare.constraints
 
-import latinsquare.{Cell, MarkUp}
-import latinsquare.exceptions.CellContentException
-
-trait Constraint {
-  def getCells : Iterable[Cell]
-
-  def checkUpdate(value : Int) : Boolean
-
-  @throws(classOf[CellContentException])
-  def update(oldValue : Int, newValue : Int) : Unit
-
-  def markup : MarkUp
+class Nonet(position : String) extends Ensemble(9, position) {
+    override def toString: String = "Nonet " + super.toString
 }

@@ -28,13 +28,13 @@ package latinsquare
 
 import java.io.File
 
+import com.typesafe.scalalogging.Logger
 import org.clapper.classutil.ClassFinder
 
 import scala.util.Try
 import scala.reflect.runtime.universe._
 
 class CLI(plugins : List[String]) {
-
     for (plugin <- plugins) {
         println(plugin)
         newInstance(plugin) match  {
@@ -55,6 +55,8 @@ class CLI(plugins : List[String]) {
 }
 
 object CLI {
+    val logger = Logger[CLI]
+
     def main(args: Array[String]): Unit = {
         disableUnchecked()
 
@@ -82,7 +84,7 @@ object CLI {
 
     def lookForStuff() : Unit = {
         val path : String = CLI.getClass.getProtectionDomain.getCodeSource.getLocation.getPath
-        println("Path found " + path)
+        logger.info("Path found " + path)
 
         val finder = ClassFinder(List(path).map(new File(_)))
         val classes = finder.getClasses()

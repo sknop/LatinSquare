@@ -24,38 +24,34 @@
  *  ******************************************************************************
  */
 
-package latinsquare.sudoku
+package latinsquare.constraints
 
-import latinsquare.Point
-import org.scalatest.OneInstancePerTest
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
+import latinsquare.exceptions.CellContentException
+import latinsquare.{Cell, MarkUp}
 
-class SudokuTest extends AnyFlatSpec  with Matchers with OneInstancePerTest {
-    behavior of "A Sudoku Puzzle"
+import scala.collection.mutable.ArrayBuffer
 
-    val sudoku = new Sudoku
+abstract class AbstractConstraint protected (size : Int, position : String) extends Constraint {
+    protected val _markup = new MarkUp(size)
 
-    it should "be empty when constructed" in {
-        for (cell <- sudoku.cells.values) {
-            cell.isEmpty should be (true)
+    // checking for 0 is checking if the cell is empty - but markUp does not allow that value
+    override def checkUpdate(value: Int): Boolean = value == 0 || ! _markup(value)
+
+    @throws(classOf[CellContentException])
+    override def update(oldValue: Int, newValue : Int): Unit = {
+        if (oldValue != 0) {
+            _markup.clear(oldValue)
+        }
+
+        if (newValue != 0) {
+            if (_markup(newValue))
+                throw new CellContentException(s"Value $newValue already exists in $this")
+
+            _markup.add(newValue)
         }
     }
 
-    it should "accept a single value and show the correct markup" in {
-        val point : Point = new Point(1, 1)
-        val cell = sudoku.cells(point)
+    override def markup: MarkUp = _markup.toImmutable
 
-        cell.value = 1
-
-        println(cell.markUp)
-        for (i <- cell.iterator)
-            println(i)
-    }
-
-    it should "create a random puzzle and solve it" in {
-        sudoku.createRandomPuzzle()
-
-        sudoku.solveBruteForce should be (true)
-    }
+    override def toString : String = s"$position (${_markup.complement})"
 }

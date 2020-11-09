@@ -24,10 +24,26 @@
  *  ******************************************************************************
  */
 
-package latinsquare.unit
+package latinsquare.constraints
 
 import latinsquare.Cell
 
-class Nonet(position : String) extends AbstractConstraint(9, position) {
-    override def toString: String = "Nonet " + super.toString
+import scala.collection.mutable.ArrayBuffer
+
+class Ensemble(size : Int, position : String) extends AbstractConstraint(size, position) {
+
+    protected val cells = new ArrayBuffer[Cell](size)
+
+    def getCells: Seq[Cell] = cells.toSeq
+
+    def addCell(cell : Cell) : Unit = {
+        require(cells.size < size, "Too many cells added")
+
+        cells.addOne(cell)
+        cell.addConstraint(this)
+    }
+
+    override def toString: String = {
+        super.toString + s" $cells"
+    }
 }

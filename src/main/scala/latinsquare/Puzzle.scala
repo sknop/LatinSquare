@@ -58,7 +58,7 @@ abstract class Puzzle(val maxValue : Int) {
     def exportFile(filename: String) : Unit = {
         try {
             val writer = new PrintWriter(new File(filename))
-            writeString(writer)
+            writeStrings(writer)
 
             writer.close()
         }
@@ -69,9 +69,7 @@ abstract class Puzzle(val maxValue : Int) {
 
     def importStrings(lines : Array[String]) : Unit
 
-    def writeString(writer : PrintWriter) : Unit
-
-    def dimension : Int
+    def writeStrings(writer : PrintWriter) : Unit
 
     def reset() : Unit = {
         cells.values.foreach(_.reset())

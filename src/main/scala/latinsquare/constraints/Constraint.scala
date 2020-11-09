@@ -24,46 +24,16 @@
  *  ******************************************************************************
  */
 
-package latinsquare.unit
+package latinsquare.constraints
 
-import latinsquare.exceptions.CellContentException
 import latinsquare.{Cell, MarkUp}
+import latinsquare.exceptions.CellContentException
 
-import scala.collection.mutable.ArrayBuffer
+trait Constraint {
+  def checkUpdate(value : Int) : Boolean
 
-abstract class AbstractConstraint protected (size : Int, position : String) extends Constraint {
-    protected val cells = new ArrayBuffer[Cell](size)
-    protected val markUp = new MarkUp(size)
+  @throws(classOf[CellContentException])
+  def update(oldValue : Int, newValue : Int) : Unit
 
-    override def getCells: Seq[Cell] = cells.toSeq
-
-    def addCell(cell : Cell) : Unit = {
-        require(cells.size < size, "Too many cells added")
-
-        cells.addOne(cell)
-        cell.addConstraint(this)
-    }
-
-    // checking for 0 is checking if the cell is empty - but markUp does not allow that value
-    override def checkUpdate(value: Int): Boolean = value == 0 || ! markUp(value)
-
-    @throws(classOf[CellContentException])
-    override def update(oldValue: Int, newValue : Int): Unit = {
-        if (oldValue != 0) {
-            markUp.clear(oldValue)
-        }
-
-        if (newValue != 0) {
-            if (markUp(newValue))
-                throw new CellContentException(s"Value $newValue already exists in $this")
-
-            markUp.add(newValue)
-        }
-    }
-
-    override def markup: MarkUp = markUp.toImmutable
-
-    override def toString: String = {
-        s"($position) $cells number : ${markUp.complement}"
-    }
+  def markup : MarkUp
 }

@@ -24,7 +24,7 @@
  *  ******************************************************************************
  */
 
-package latinsquare.unit
+package latinsquare.constraints
 
 import latinsquare.Cell
 import latinsquare.exceptions.CellContentException
